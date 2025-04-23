@@ -41,7 +41,7 @@ H = 270;    % Quota [m]
 G = 0;      % Angolo di rampa
 rho = 1.225*exp(-10^-4*H);
 
-[X0_air3m, U0_air3m] = air3m('airtrim',V,H,G)
+[X0_air3m, U0_air3m] = air3m('airtrim',V,H,G);
 
 %Impostazioni delle nuove variabili di spinta e angolo di equilibratore
 
@@ -54,29 +54,29 @@ de0_air3m = U0_air3m(7);
 % Importazione del sistema dinamico longitudinale creato con il tool di
 % Simulink MODEL LINEARIZER
 
-Along = [-0.02283         3.751     3.645e-13        -9.806     9.904e-05;
-    -0.002424        -1.941        0.9669     -2.69e-13     1.048e-05;
-    -1.355e-17         -6.02        -9.374             0      5.88e-20;
-    0             0             1             0             0;
-    7.993e-14           -90             0            90             0];
-
-Blong= [3.752e-12;
-    -0.3413;
-    -99.31;
-    0;
-    0];
-Clong = [1             0             0             0             0;
-    0             0             0             0             1;
-    0             1             0             0             0;
-    0             0             1             0             0;
-    0             0             0             1             0];
-
+Along = [-0.02523       4.024   3.352e-14      -9.806   0.0001158;
+         -0.002173      -2.558      0.9608   2.299e-13   9.934e-06;
+         1.974e-18      -25.54      -4.792           0  -9.056e-21;
+                 0           0           1           0           0;
+        -3.25e-16         -95           0          95           0];
+ 
+Blong = [2.381e-13;
+           -0.2787;
+            -27.03;
+                 0;
+                 0];
+ 
+Clong = [1   0   0   0   0;
+         0   0   0   0   1;
+         0   1   0   0   0;
+         0   0   1   0   0;
+         0   0   0   1   0];
+ 
 Dlong = [0;
-    0;
-    0;
-    0;
-    0];
-
+         0;
+         0;
+         0;
+         0];
 % Si ricorda che il vettore di stato è X=(V zetaE alpha q theta)
 % e che il vettore di output (per il sistema longitudinale) è
 % Y=(V alpha q theta ZetaE)
@@ -193,28 +193,29 @@ zita_SP = -(Mq+Zw/V+Mwdot)/(2*omega_SP); %Verificare gli altri termini al numera
 % Importazione del sistema dinamico longitudinale creato con il tool di
 % Simulink MODEL LINEARIZER
 
-Alat = [ -0.2941      -0.01567       -0.9906             0        0.1089;
-    -8.097        -2.544        0.3365             0             0;
-    8.616      -0.09581       -0.5573             0             0;
-    0             0             1             0             0;
-    0             1       -0.01195             0             0];
-Blat = [    0   0.09691;
-    -12.71     1.419;
-    1.002    -6.873;
-    0         0;
-    0         0];
-
-Clat =[ 1             0             0             0             0;
-    0             1             0             0             0;
-    0             0             1             0             0;
-    0             0             0             1             0;
-    0             0             0             0             1];
-
-Dlat =  [0         0;
-    0         0;
-    0         0;
-    0         0;
-    0         0];
+Alat = [-0.274  -0.005251    -0.9866          0     0.1032;
+        -18.08     -5.352      1.354          0          0;
+         3.774     -0.321    -0.8199          0          0;
+             0          0          1          0          0;
+             0          1   0.001261          0          0];
+ 
+Blat = [0  0.06874;
+   -22.65   0.8048;
+   -1.497   -4.798;
+        0        0;
+        0        0];
+ 
+Clat = [1   0   0   0   0;
+        0   1   0   0   0;
+        0   0   1   0   0;
+        0   0   0   1   0;
+        0   0   0   0   1];
+ 
+Dlat = [0   0;
+        0   0;
+        0   0;
+        0   0;
+        0   0];
 
 %Gli stati sono (Beta p r psi phi)
 
