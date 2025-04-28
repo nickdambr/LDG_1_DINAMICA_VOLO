@@ -144,63 +144,82 @@ c04=c0(4);
 c04.Color='m';
 c04.LineWidth=2;
 
-Cd0 = 0.027; Cda = 0.131; Cdq = 0; Cdde = 0; Cdih = 0;
-Cl0 = 0.201; Cla = 5.48; Clq = 8.1; Clde = 0.6; Clih = 0;
-Cm0 = 0.05; Cma = -1.89; Cmq = -34; Cmde = -2; Cmih = 0;
-CY0 = 0; CYb = -0.59; CYp = -0.19; CYr = 0.39; CYda = 0.0; CYdr = 0.148;
-Ix = 13673; Iy = 20538; Iz = 31246;
 
-% Confronto con i modelli di ordine ridotto
+% Confronto con i modelli di ordine ridotto della dinamica longitudinale
+
+CD0 = 0.027; CDa = 0.131; CDq = 0; CDde = 0; CDih = 0;
+CL0 = 0.201; CLa = 5.48; CLq = 8.1; CLde = 0.6; CLih = 0;
+Cm0 = 0.05; Cma = -1.89; Cmq = -34; Cmde = -2; Cmih = 0;
+Ixb = 13673; Iyb = 20538; Izb = 31246; Ixzb = 0; alpha0 = -0.00393591;
+
+Ixs = Ixb * cos(alpha0)^2 + Izb * sin(alpha0)^2 - Ixzb * sin(2*alpha0);
+Iys = Iyb;
+Izs = Ixb * sin(alpha0)^2 + Izb * cos(alpha0)^2 + Ixzb * sin(2*alpha0);
+Ixzs = Ixzb * cos(2*alpha0) + 0.5 * (Ixb - Izb) * sin(2*alpha0);
+
 
 % Calcolo delle derivate di stabilità
 
 T = Fx0_air3m;
-Cde = 2*T/(S*rho*V^2);
-Cle = (2*W)/(rho*S*V^2);
-Xu = (0.5*rho*V*S*(-3*Cde))/m;
-Zu = (-0.5*rho*V*S*(2*Cle))/m;
+CDe = 2*T/(S*rho*V^2);
+CLe = (2*W)/(rho*S*V^2);
+Xu = (0.5*rho*V*S*(-3*CDe))/m;
+Zu = (-0.5*rho*V*S*(2*CLe))/m;
 Mu = 0; %si trascurano gli effetti della comprimibilità
-Xw = (0.5*rho*V*S*(Cle-Cda)/m);
-Zw = (-0.5*rho*V*S*(Cla+Cde))/m;
-Mw = (0.5*rho*V*S*cbar*Cma)/Iy;
-Mq = (0.25*rho*S*V*cbar^2*Cmq)/Iy;
+Xw = (0.5*rho*V*S*(CLe-CDa)/m);
+Zw = (-0.5*rho*V*S*(CLa+CDe))/m;
+Mw = (0.5*rho*V*S*cbar*Cma)/Iys;
+Mq = (0.25*rho*S*V*cbar^2*Cmq)/Iys;
 
+% Modelli di ordine ridotto del fugoide
 
 % Modello di Lanchester
 
-omega_ph1 = sqrt(2)*(9.81/V);
+omega_ph_lanch = sqrt(2)*(9.81/V);
 
 
 % Primo modello
 
-Ee = Cle/Cde;
-omega_ph2 = omega_ph1;
-zita_ph2 = -Xu/(2*omega_ph2);
+Ee = CLe/CDe;
+omega_ph1 = omega_ph_lanch;
+T_ph1=1/omega_ph1;
+zita_ph1 = -Xu/(2*omega_ph1);
 
 
 % Secondo modello
 
 Mwue = Mw*V;
 MqZw = Mq*Zw;
-omega_ph3_semp = omega_ph2;
-zita_ph3_semp = -Xu/(2*omega_ph3_semp);
-omega_ph3 = sqrt(g*(Mu*Zw-Mw*Zu)/(Mw*V-Mq*Zw));
-zita_ph3 = -(Xu+Xw*((Mq*Zu-Mu*V)/(Mw*V-Mq*Zw)))/(2*omega_ph3);
+omega_ph2_semp = omega_ph1;
+zita_ph2_semp = -Xu/(2*omega_ph2_semp);
+T_ph2_semp=1/omega_ph2_semp;
+omega_ph2 = sqrt(g*(Mu*Zw-Mw*Zu)/(Mw*V-Mq*Zw));
+T_ph2=1/omega_ph2;
+zita_ph2 = -(Xu+Xw*((Mq*Zu-Mu*V)/(Mw*V-Mq*Zw)))/(2*omega_ph2);
+
 
 % Effetto del gradiente di densità nel fugoide
 
-kappa = 10^(-4);
-omega_ph3_prime = omega_ph3 * sqrt(1 + (kappa * W) / (rho * S * g * Cle));
+kappa = 1.38*10^(-4);
+Fcorr=1/sqrt(1 + (kappa * V^2)/(2*g));
+omega_ph2_prime = omega_ph2/Fcorr;
+zita_ph2_prime = -(Xu+Xw*((Mq*Zu-Mu*V)/(Mw*V-Mq*Zw)))/(2*omega_ph2_prime);
+Eff_grad_ph = (omega_ph2_prime-omega_ph2)/omega_ph2 * 100;
 
 
 % Modello approssimato corto periodo
 
-omega_SP = sqrt((-0.5*rho*V^2*S*cbar*Cma)/Iy);
+omega_SP = sqrt((-0.5*rho*V^2*S*cbar*Cma)/Iys);
+T_SP=1/omega_SP;
 zita_SP = -(Mq+Zw)/(2*omega_SP);
+
 
 % Effetto del gradiente di densità nel corto periodo
 
-omega_SP_prime = omega_SP * sqrt(1 + (kappa * W) / (rho * S * g * Cle));
+omega_SP_prime = omega_SP/Fcorr;
+zita_SP_prime = -(Mq+Zw)/(2*omega_SP_prime);
+Eff_grad_SP = (omega_SP_prime-omega_SP)/omega_SP * 100;
+
 
 
 %------------------------------------------------------------------------
@@ -375,29 +394,46 @@ c35=c3(5);
 c35.Color='y';
 c35.LineWidth=2;
 
-% Confronto con il modello di ordine ridotto
 
-N1_r = Alat(3,3);
-N1_p = Alat(3,2);
-N1_beta = Alat(3,1);
-L1_r = Alat(2,3);
-L1_p = Alat(2,2);
-L1_beta = Alat(2,1);
-Yb = Alat(1,1)*V;
+% Confronto con i modelli di ordine ridotto della dinamica latero-direzionale
 
-% Modo Rollio
+CY0 = 0; CYb = -0.59; CYp = -0.19; CYr = 0.39; CYda = 0.0; CYdr = 0.148;
+Cl0 = 0; Clb = -0.13; Clp = -0.5; Clr = 0.14; Clda = -0.156; Cldr = 0.0109;
+Cn0 = 0; Cnb = 0.08; Cnp = 0.0109; Cnr = -0.197; Cnda = 0.0012; Cndr = - 0.0772;
 
-lambda_p = L1_p;
+% Calcolo delle derivate di stabilità
 
-% 1° Modello spirale
+Yv = (0.5*rho*V*S*CYb)/m;
+Yb = Yv*V;
+Lv = (0.5*rho*V*S*b*Clb)/Ixs;
+Lb = Lv*V;
+Nv = (0.5*rho*V*S*b*Cnb)/Izs;
+Nb = Nv*V;
+Lb_prime = Lb+(Ixzs/Ixs)* Nb;
+Lp = (0.25*rho*V*S*b^2*Clp)/Ixs;
+Np = (0.25*rho*V*S*b^2*Cnp)/Izs;
+Lp_prime = Lp+(Ixzs/Ixs)* Np;
+Lr = (0.25*rho*V*S*b^2*Clr)/Iys;
+Nr = (0.25*rho*S*V*b^2*Cnr)/Iys;
+Lr_prime = Lr+(Ixzs/Ixs)* Nr;
+Nb_prime = Nb+(Ixzs/Izs)* Lb;
+Np_prime = Np+(Ixzs/Izs)* Lp;
+Nr_prime = Nr+(Ixzs/Izs)* Lr;
 
-lambda_s1 = (g/V)*( (N1_r*L1_beta - N1_beta*L1_r)/ (L1_beta));
 
-% 2° Modello spirale
+% Modelli di ordine ridotto dello spirale
 
-lambda_s2 = (g/V)*( (N1_r*L1_beta - N1_beta*L1_r)/ (N1_beta*L1_p - N1_p*L1_beta));
+% Primo modello
 
-% 3° Modello spirale
+lambda_s1 = (Nr_prime * Lb_prime - Nb_prime * Lr_prime)/Lb_prime;
+T_s1 = - 1/lambda_s1;
+
+% Secondo modello
+
+lambda_s2 = - (g * (Lb_prime * Nr_prime - Nb_prime * Lr_prime)) / (Yb * (Lr_prime * Np_prime - Nr_prime * Lp_prime) + V * (Nb_prime * Lp_prime - Lb_prime * Np_prime));
+T_s2 = - 1/lambda_s2;
+
+% Terzo modello
 
 Char_polyn_lat=poly(Alat);
 a1_lat=Char_polyn_lat(2);
@@ -405,9 +441,17 @@ a2_lat=Char_polyn_lat(3);
 a3_lat=Char_polyn_lat(4);
 a4_lat=Char_polyn_lat(5);
 lambda_s3=-a4_lat/a3_lat;
+T_s3 = - 1/lambda_s3;
 
 
-% Modello approssimato Dutch Roll
+% Modello di ordine ridotto del rollio
 
-omega_DRa = sqrt(N1_beta+N1_r*(Yb/V));
-zita_DRa = - ((Yb/V)+N1_r)/(2*omega_DRa);
+lambda_p = Lp_prime;
+T_p = 2*pi/lambda_p;
+
+
+% Modello di ordine ridotto del dutch roll
+
+omega_DRa = sqrt(Nb_prime + Nr_prime * (Yb/V));
+zita_DRa = - ((Yb/V)+Nr_prime)/(2*omega_DRa);
+T_DRa = 2*pi/omega_DRa;
