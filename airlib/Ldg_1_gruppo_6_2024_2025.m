@@ -28,7 +28,7 @@ de0 = 0.0287194;
 dh0 = 0;
 W = 3175.2*9.81;     %[N]
 S = 26.0129;     % Superficie Alare
-b = 14.028;
+b = 14.0208;
 cbar = 1.9812;      % Corda media del velivolo
 g = 9.81;
 m=W/g;
@@ -144,42 +144,45 @@ c04=c0(4);
 c04.Color='m';
 c04.LineWidth=2;
 
-Cd0 = 0.029; Cda = 0.16; Cdq = 0; Cdde = 0; Cdih = 0;
-Cl0 = 0.288; Cla = 4.58; Clq = 9.7; Clde = 0.81; Clih = 0;
-Cm0 = 0.07; Cma = -0.137; Cmq = -26.3; Cmde = -2.26; Cmih = 0;
-CY0 = 0; CYb = -0.698; CYp = -0.141; CYr = 0.355; CYda = 0.0; CYdr = 0.23;
-Ix = 12045; Iy = 2628.9; Iz = 14915;
+Cd0 = 0.027; Cda = 0.131; Cdq = 0; Cdde = 0; Cdih = 0;
+Cl0 = 0.201; Cla = 5.48; Clq = 8.1; Clde = 0.6; Clih = 0;
+Cm0 = 0.05; Cma = -1.89; Cmq = -34; Cmde = -2; Cmih = 0;
+CY0 = 0; CYb = -0.59; CYp = -0.19; CYr = 0.39; CYda = 0.0; CYdr = 0.148;
+Ix = 13673; Iy = 20538; Iz = 31246;
 
 % Confronto con i modelli di ordine ridotto
 
-% Primo modello
+%Calcolo delle derivate di stabilità 
+T=Fx0_air3m;
+Cde=2*T/(S*rho*V^2);
+Cle = (2*W)/(rho*S*V^2);
+Xu=(0.5*rho*V*S*(-3*Cde))/m;
+Zu=(-0.5*rho*V*S*(2*Cle))/m;
+Mu=0; %si trascurano gli effetti della comprimibilità
+Xw=(0.5*rho*V*S*(Cle-Cda)/m);
+Zw=(-0.5*rho*V*S*(Cla+Cde))/m;
+Mw=(0.5*rho*V*S*cbar*Cma)/Iy;
+Mq = (0.25*rho*S*V*cbar^2*Cmq)/Iy;
+
+
+% Modello di Lanchester
 
 omega_ph1 = sqrt(2)*(9.81/V);
 
-% Secondo modello
-T=Fx0_air3m;
-Cle = (2*W)/(rho*S*V^2);
-Cde=2*T/(S*rho*V^2);
-Xu=(0.5*rho*V*S*(-2*Cde))/m;
+% Primo modello
 Ee = Cle/Cde;
 omega_ph2 = omega_ph1;
 zita_ph2 = -Xu/(2*omega_ph2);
 
-% Terzo modello
+% Secondo modello
 alpha_e= 1.0e+02 *(-0.000119541184197);
 Clu = 0;
 Ctu=0;
 Cte=2*T/(rho*V^2*S);
 Cde=Cd0+Cda*alpha_e;
-Zu=(-0.5*rho*V*S*(2*Cle))/m;
-Mu=0; %si trascurano gli effetti della comprimibilità
 Xu=(0.5*rho*V*S*(2*(Cte-Cde)))/m;
-Xw=(0.5*rho*V*S*(Cle-Cda)/m);
-Zw=(-0.5*rho*V*S*(Cla+Cde))/m;
 Mqtilde = Along(3,3);
 Mwtilde = Along(3,2);
-Mq = (0.25*rho*S*V*cbar^2*Cmq)/Iy;
-Mw=(0.5*rho*V*S*cbar*Cma)/Iy;
 Mwdot = (Mqtilde - Mq)/V;
 omega_ph3 = sqrt(g*(Mu*Zw-Mw*Zu)/(Mw*V-Mq*Zw));
 zita_ph3 = -(Xu+Xw*((Mq*Zu-Mu*V)/(Mw*V-Mq*Zw)))/(2*omega_ph3);
