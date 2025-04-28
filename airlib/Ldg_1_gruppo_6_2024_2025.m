@@ -183,7 +183,7 @@ zita_ph2 = -Xu/(2*omega_ph2);
 Mwue = Mw*V;
 MqZw = Mq*Zw;
 omega_ph3_semp = omega_ph2;
-zita_ph3_semp = -Xu/(2*omega_ph3s);
+zita_ph3_semp = -Xu/(2*omega_ph3_semp);
 omega_ph3 = sqrt(g*(Mu*Zw-Mw*Zu)/(Mw*V-Mq*Zw));
 zita_ph3 = -(Xu+Xw*((Mq*Zu-Mu*V)/(Mw*V-Mq*Zw)))/(2*omega_ph3);
 
