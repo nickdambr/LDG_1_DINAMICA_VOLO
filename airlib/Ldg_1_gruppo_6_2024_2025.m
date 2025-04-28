@@ -188,22 +188,10 @@ omega_ph3 = sqrt(g*(Mu*Zw-Mw*Zu)/(Mw*V-Mq*Zw));
 zita_ph3 = -(Xu+Xw*((Mq*Zu-Mu*V)/(Mw*V-Mq*Zw)))/(2*omega_ph3);
 
 
-% Effetto del gradiente di densità nel fugoide
-
-kappa = 10^(-4);
-omega_ph3_prime = omega_ph3 * sqrt(1 + (kappa * W) / (rho * S * g * Cle));
-
-
 % Modello approssimato corto periodo
 
 omega_SP = sqrt((-0.5*rho*V^2*S*cbar*Cma)/Iy);
 zita_SP = -(Mq+Zw)/(2*omega_SP);
-
-
-% Effetto del gradiente di densità nel corto periodo
-
-omega_SP_prime = omega_SP * sqrt(1 + (kappa * W) / (rho * S * g * Cle));
-
 
 
 %------------------------------------------------------------------------
