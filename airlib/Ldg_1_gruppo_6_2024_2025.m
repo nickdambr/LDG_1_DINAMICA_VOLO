@@ -152,18 +152,18 @@ Ix = 13673; Iy = 20538; Iz = 31246;
 
 % Confronto con i modelli di ordine ridotto
 
-%Calcolo delle derivate di stabilità
+% Calcolo delle derivate di stabilità
 
-T=Fx0_air3m;
-Cde=2*T/(S*rho*V^2);
+T = Fx0_air3m;
+Cde = 2*T/(S*rho*V^2);
 Cle = (2*W)/(rho*S*V^2);
-Xu=(0.5*rho*V*S*(-3*Cde))/m;
-Zu=(-0.5*rho*V*S*(2*Cle))/m;
-Mu=0; %si trascurano gli effetti della comprimibilità
-Xw=(0.5*rho*V*S*(Cle-Cda)/m);
-Zw=(-0.5*rho*V*S*(Cla+Cde))/m;
-Mw=(0.5*rho*V*S*cbar*Cma)/Iy;
-Mq=(0.25*rho*S*V*cbar^2*Cmq)/Iy;
+Xu = (0.5*rho*V*S*(-3*Cde))/m;
+Zu = (-0.5*rho*V*S*(2*Cle))/m;
+Mu = 0; %si trascurano gli effetti della comprimibilità
+Xw = (0.5*rho*V*S*(Cle-Cda)/m);
+Zw = (-0.5*rho*V*S*(Cla+Cde))/m;
+Mw = (0.5*rho*V*S*cbar*Cma)/Iy;
+Mq = (0.25*rho*S*V*cbar^2*Cmq)/Iy;
 
 
 % Modello di Lanchester
@@ -180,18 +180,31 @@ zita_ph2 = -Xu/(2*omega_ph2);
 
 % Secondo modello
 
-Mwue=Mw*V;
-MqZw=Mq*Zw;
-omega_ph3s = omega_ph2;
-zita_ph3s = -Xu/(2*omega_ph3);
+Mwue = Mw*V;
+MqZw = Mq*Zw;
+omega_ph3_semp = omega_ph2;
+zita_ph3_semp = -Xu/(2*omega_ph3s);
 omega_ph3 = sqrt(g*(Mu*Zw-Mw*Zu)/(Mw*V-Mq*Zw));
 zita_ph3 = -(Xu+Xw*((Mq*Zu-Mu*V)/(Mw*V-Mq*Zw)))/(2*omega_ph3);
+
+
+% Effetto del gradiente di densità nel fugoide
+
+kappa = 10^(-4);
+omega_ph3_prime = omega_ph3 * sqrt(1 + (kappa * W) / (rho * S * g * Cle));
 
 
 % Modello approssimato corto periodo
 
 omega_SP = sqrt((-0.5*rho*V^2*S*cbar*Cma)/Iy);
 zita_SP = -(Mq+Zw)/(2*omega_SP);
+
+
+% Effetto del gradiente di densità nel corto periodo
+
+omega_SP_prime = omega_SP * sqrt(1 + (kappa * W) / (rho * S * g * Cle));
+
+
 
 %------------------------------------------------------------------------
 
