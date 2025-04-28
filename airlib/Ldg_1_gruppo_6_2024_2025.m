@@ -152,7 +152,8 @@ Ix = 13673; Iy = 20538; Iz = 31246;
 
 % Confronto con i modelli di ordine ridotto
 
-%Calcolo delle derivate di stabilità 
+%Calcolo delle derivate di stabilità
+
 T=Fx0_air3m;
 Cde=2*T/(S*rho*V^2);
 Cle = (2*W)/(rho*S*V^2);
@@ -162,36 +163,35 @@ Mu=0; %si trascurano gli effetti della comprimibilità
 Xw=(0.5*rho*V*S*(Cle-Cda)/m);
 Zw=(-0.5*rho*V*S*(Cla+Cde))/m;
 Mw=(0.5*rho*V*S*cbar*Cma)/Iy;
-Mq = (0.25*rho*S*V*cbar^2*Cmq)/Iy;
+Mq=(0.25*rho*S*V*cbar^2*Cmq)/Iy;
 
 
 % Modello di Lanchester
 
 omega_ph1 = sqrt(2)*(9.81/V);
 
+
 % Primo modello
+
 Ee = Cle/Cde;
 omega_ph2 = omega_ph1;
 zita_ph2 = -Xu/(2*omega_ph2);
 
+
 % Secondo modello
-alpha_e= 1.0e+02 *(-0.000119541184197);
-Clu = 0;
-Ctu=0;
-Cte=2*T/(rho*V^2*S);
-Cde=Cd0+Cda*alpha_e;
-Xu=(0.5*rho*V*S*(2*(Cte-Cde)))/m;
-Mqtilde = Along(3,3);
-Mwtilde = Along(3,2);
-Mwdot = (Mqtilde - Mq)/V;
+
+Mwue=Mw*V;
+MqZw=Mq*Zw;
+omega_ph3s = omega_ph2;
+zita_ph3s = -Xu/(2*omega_ph3);
 omega_ph3 = sqrt(g*(Mu*Zw-Mw*Zu)/(Mw*V-Mq*Zw));
 zita_ph3 = -(Xu+Xw*((Mq*Zu-Mu*V)/(Mw*V-Mq*Zw)))/(2*omega_ph3);
 
 
-
 % Modello approssimato corto periodo
-omega_SP = sqrt(-Mw+(Zw/V)*Mq);
-zita_SP = -(Mq+Zw/V+Mwdot)/(2*omega_SP); %Verificare gli altri termini al numeratore
+
+omega_SP = sqrt((-0.5*rho*V^2*S*cbar*Cma)/Iy);
+zita_SP = -(Mq+Zw)/(2*omega_SP);
 
 %------------------------------------------------------------------------
 
