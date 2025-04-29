@@ -43,8 +43,6 @@ rho = 1.225*exp(-10^-4*H);
 
 [X0_air3m, U0_air3m] = air3m('airtrim',V,H,G);
 
-% X0_air3m = [95 0.0013 0 0 0 0 0 0.0013 0 0 0 270]
-% U0_air3m = [0.380596566005482 0 0 0 0 0 0.0238081811020551 0 0 0]
 
 %Impostazioni delle nuove variabili di spinta e angolo di equilibratore
 
@@ -57,29 +55,9 @@ de0_air3m = U0_air3m(7);
 % Importazione del sistema dinamico longitudinale creato con il tool di
 % Simulink MODEL LINEARIZER
 
-Along = [-0.02523       4.024   3.352e-14      -9.806   0.0001158;
-         -0.002173      -2.558      0.9608   2.299e-13   9.934e-06;
-         1.974e-18      -25.54      -4.792           0  -9.056e-21;
-                 0           0           1           0           0;
-        -3.25e-16         -95           0          95           0];
- 
-Blong = [2.381e-13;
-           -0.2787;
-            -27.03;
-                 0;
-                 0];
- 
-Clong = [1   0   0   0   0;
-         0   0   0   0   1;
-         0   1   0   0   0;
-         0   0   1   0   0;
-         0   0   0   1   0];
- 
-Dlong = [0;
-         0;
-         0;
-         0;
-         0];
+load('linsysLONG_beechcraft99.mat');
+[Along, Blong, Clong, Dlong] = ssdata(linsysLONG);   % estrae le matrici
+
 % Si ricorda che il vettore di stato è X=(V zetaE alpha q theta)
 % e che il vettore di output (per il sistema longitudinale) è
 % Y=(V alpha q theta ZetaE)
@@ -281,29 +259,8 @@ Eff_grad_SP = abs(omega_SP_prime-omega_SP)/omega_SP * 100;
 % Importazione del sistema dinamico longitudinale creato con il tool di
 % Simulink MODEL LINEARIZER
 
-Alat = [-0.274  -0.005251    -0.9866          0     0.1032;
-        -18.08     -5.352      1.354          0          0;
-         3.774     -0.321    -0.8199          0          0;
-             0          0          1          0          0;
-             0          1   0.001261          0          0];
- 
-Blat = [0  0.06874;
-   -22.65   0.8048;
-   -1.497   -4.798;
-        0        0;
-        0        0];
- 
-Clat = [1   0   0   0   0;
-        0   1   0   0   0;
-        0   0   1   0   0;
-        0   0   0   1   0;
-        0   0   0   0   1];
- 
-Dlat = [0   0;
-        0   0;
-        0   0;
-        0   0;
-        0   0];
+load('linsysLAT_beechcraft99.mat');
+[Alat, Blat, Clat, Dlat] = ssdata(linsysLAT);   % estrae le matrici
 
 %Gli stati sono (Beta p r psi phi)
 
