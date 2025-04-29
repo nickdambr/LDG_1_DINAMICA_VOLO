@@ -185,7 +185,7 @@ omega_ph1 = sqrt((-g * Zu)/V);
 T_ph1=1/omega_ph1;
 zita_ph1 = -Xu/(2*omega_ph1);
 Err_ph1 = abs(omega_ph1-omega_ph)/omega_ph * 100;
-Err_z1 = abs(zita_ph1-zita_ph)/zita_ph * 100;
+Err_z1eta= abs(zita_ph1-zita_ph)/zita_ph * 100;
 
 
 % Secondo modello
