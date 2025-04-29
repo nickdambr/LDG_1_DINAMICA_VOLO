@@ -150,7 +150,7 @@ c04.LineWidth=2;
 CD0 = 0.027; CDa = 0.131; CDq = 0; CDde = 0; CDih = 0;
 CL0 = 0.201; CLa = 5.48; CLq = 8.1; CLde = 0.6; CLih = 0;
 Cm0 = 0.05; Cma = -1.89; Cmq = -34; Cmde = -2; Cmih = 0;
-Ixb = 13673; Iyb = 20538; Izb = 31246; Ixzb = 0; alpha0 = -0.00393591;
+Ixb = 13673; Iyb = 20538; Izb = 31246; Ixzb = 2169.3; alpha0 = -0.00393591;
 
 Ixs = Ixb * cos(alpha0)^2 + Izb * sin(alpha0)^2 - Ixzb * sin(2*alpha0);
 Iys = Iyb;
@@ -181,9 +181,11 @@ omega_ph_lanch = sqrt(2)*(9.81/V);
 % Primo modello
 
 Ee = CLe/CDe;
-omega_ph1 = omega_ph_lanch;
+omega_ph1 = sqrt((-g * Zu)/V);
 T_ph1=1/omega_ph1;
 zita_ph1 = -Xu/(2*omega_ph1);
+Err_ph1 = abs(omega_ph1-omega_ph)/omega_ph * 100;
+Err_z1 = abs(zita_ph1-zita_ph)/zita_ph * 100;
 
 
 % Secondo modello
@@ -196,6 +198,8 @@ T_ph2_semp=1/omega_ph2_semp;
 omega_ph2 = sqrt(g*(Mu*Zw-Mw*Zu)/(Mw*V-Mq*Zw));
 T_ph2=1/omega_ph2;
 zita_ph2 = -(Xu+Xw*((Mq*Zu-Mu*V)/(Mw*V-Mq*Zw)))/(2*omega_ph2);
+Err_ph2 = abs(omega_ph2-omega_ph)/omega_ph * 100;
+Err_z2 = abs(zita_ph2-zita_ph)/zita_ph * 100;
 
 
 % Effetto del gradiente di densità nel fugoide
@@ -204,7 +208,9 @@ kappa = 1.38*10^(-4);
 Fcorr=1/sqrt(1 + (kappa * V^2)/(2*g));
 omega_ph2_prime = omega_ph2/Fcorr;
 zita_ph2_prime = -(Xu+Xw*((Mq*Zu-Mu*V)/(Mw*V-Mq*Zw)))/(2*omega_ph2_prime);
-Eff_grad_ph = (omega_ph2_prime-omega_ph2)/omega_ph2 * 100;
+Eff_grad_ph = abs(omega_ph2_prime-omega_ph2)/omega_ph2 * 100;
+Err_ph2_corr = abs(omega_ph2_prime-omega_ph)/omega_ph * 100;
+Err_z2_corr = abs(zita_ph2_prime-zita_ph)/zita_ph * 100;
 
 
 % Modello approssimato corto periodo
@@ -218,7 +224,7 @@ zita_SP = -(Mq+Zw)/(2*omega_SP);
 
 omega_SP_prime = omega_SP/Fcorr;
 zita_SP_prime = -(Mq+Zw)/(2*omega_SP_prime);
-Eff_grad_SP = (omega_SP_prime-omega_SP)/omega_SP * 100;
+Eff_grad_SP = abs(omega_SP_prime-omega_SP)/omega_SP * 100;
 
 
 
@@ -426,12 +432,14 @@ Nr_prime = Nr+(Ixzs/Izs)* Lr;
 % Primo modello
 
 lambda_s1 = (Nr_prime * Lb_prime - Nb_prime * Lr_prime)/Lb_prime;
-T_s1 = - 1/lambda_s1;
+T_s1 = - 2*pi/lambda_s1;
+Err_s1 = abs(lambda_s1-EIGlat(5,5))/abs(EIGlat(5,5)) * 100;
 
 % Secondo modello
 
 lambda_s2 = - (g * (Lb_prime * Nr_prime - Nb_prime * Lr_prime)) / (Yb * (Lr_prime * Np_prime - Nr_prime * Lp_prime) + V * (Nb_prime * Lp_prime - Lb_prime * Np_prime));
-T_s2 = - 1/lambda_s2;
+T_s2 = - 2*pi/lambda_s2;
+Err_s2 = abs(lambda_s2-EIGlat(5,5))/abs(EIGlat(5,5)) * 100;
 
 % Terzo modello
 
@@ -441,13 +449,15 @@ a2_lat=Char_polyn_lat(3);
 a3_lat=Char_polyn_lat(4);
 a4_lat=Char_polyn_lat(5);
 lambda_s3=-a4_lat/a3_lat;
-T_s3 = - 1/lambda_s3;
+T_s3 = - 2*pi/lambda_s3;
+Err_s3 = abs(lambda_s3-EIGlat(5,5))/abs(EIGlat(5,5)) * 100;
 
 
 % Modello di ordine ridotto del rollio
 
 lambda_p = Lp_prime;
 T_p = 2*pi/lambda_p;
+Err_p = abs(lambda_p-EIGlat(2,2))/abs(EIGlat(2,2)) * 100;
 
 
 % Modello di ordine ridotto del dutch roll
@@ -455,3 +465,6 @@ T_p = 2*pi/lambda_p;
 omega_DRa = sqrt(Nb_prime + Nr_prime * (Yb/V));
 zita_DRa = - ((Yb/V)+Nr_prime)/(2*omega_DRa);
 T_DRa = 2*pi/omega_DRa;
+Err_DRa = abs(omega_DRa-omega_dr)/omega_dr * 100;
+Err_zDRa = abs(zita_DRa-zita_dr)/zita_dr * 100;
+Err_TDRa = abs(T_DRa-T_dr)/T_dr * 100;
