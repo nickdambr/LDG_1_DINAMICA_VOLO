@@ -43,6 +43,8 @@ rho = 1.225*exp(-10^-4*H);
 
 [X0_air3m, U0_air3m] = air3m('airtrim',V,H,G);
 
+% X0_air3m = [95 0.0013 0 0 0 0 0 0.0013 0 0 0 270]
+% U0_air3m = [0.380596566005482 0 0 0 0 0 0.0238081811020551 0 0 0]
 
 %Impostazioni delle nuove variabili di spinta e angolo di equilibratore
 
@@ -55,9 +57,29 @@ de0_air3m = U0_air3m(7);
 % Importazione del sistema dinamico longitudinale creato con il tool di
 % Simulink MODEL LINEARIZER
 
-load('linsysLONG_beechcraft99.mat');
-[Along, Blong, Clong, Dlong] = ssdata(linsysLONG);   % estrae le matrici
-
+Along = [-0.02523       4.024   3.352e-14      -9.806   0.0001158;
+         -0.002173      -2.558      0.9608   2.299e-13   9.934e-06;
+         1.974e-18      -25.54      -4.792           0  -9.056e-21;
+                 0           0           1           0           0;
+        -3.25e-16         -95           0          95           0];
+ 
+Blong = [2.381e-13;
+           -0.2787;
+            -27.03;
+                 0;
+                 0];
+ 
+Clong = [1   0   0   0   0;
+         0   0   0   0   1;
+         0   1   0   0   0;
+         0   0   1   0   0;
+         0   0   0   1   0];
+ 
+Dlong = [0;
+         0;
+         0;
+         0;
+         0];
 % Si ricorda che il vettore di stato è X=(V zetaE alpha q theta)
 % e che il vettore di output (per il sistema longitudinale) è
 % Y=(V alpha q theta ZetaE)
@@ -259,8 +281,29 @@ Eff_grad_SP = abs(omega_SP_prime-omega_SP)/omega_SP * 100;
 % Importazione del sistema dinamico longitudinale creato con il tool di
 % Simulink MODEL LINEARIZER
 
-load('linsysLAT_beechcraft99.mat');
-[Alat, Blat, Clat, Dlat] = ssdata(linsysLAT);   % estrae le matrici
+Alat = [-0.274  -0.005251    -0.9866          0     0.1032;
+        -18.08     -5.352      1.354          0          0;
+         3.774     -0.321    -0.8199          0          0;
+             0          0          1          0          0;
+             0          1   0.001261          0          0];
+ 
+Blat = [0  0.06874;
+   -22.65   0.8048;
+   -1.497   -4.798;
+        0        0;
+        0        0];
+ 
+Clat = [1   0   0   0   0;
+        0   1   0   0   0;
+        0   0   1   0   0;
+        0   0   0   1   0;
+        0   0   0   0   1];
+ 
+Dlat = [0   0;
+        0   0;
+        0   0;
+        0   0;
+        0   0];
 
 %Gli stati sono (Beta p r psi phi)
 
@@ -409,6 +452,91 @@ xline(0, '--k', 'Re = 0');  % Asse immaginario (verticale)
 yline(0, '--k', 'Im = 0');  % Asse reale (orizzontale)
 title('Confronto dinamica longitudinale e latero-direzionale')
 legend([long, lat])  % mostra SOLO questi due
+
+% Confronto con il modello di ordine ridotto
+%Lp=
+
+
+% Modo Spirale ----------------
+
+omega_s = omega_n_lat(3);
+T_s = 2*pi/omega_s;
+zita_s = -real(EIGlat(3,3))/omega_n_lat(3);
+
+% Autovettore associato alla Spirale
+Z_s=Vlat(:,3);
+% Adimensionalizzazione
+Z_s(2)=Z_s(2)*(b/(2*V));
+Z_s(3)=Z_s(3)*(b/(2*V));
+% Normalizzazione dei vettori rispetto a phi
+Z_r=Z_r./Z_r(5);
+% diagramma di Argand non necessario per dinamiche non oscillatorie
+% Tracciamento del Diagramma di Argand
+%%%%%%figure( )
+% c2=compass(Z_s);
+% title('Spiral Mode Argand Diagram')
+% legend('β','p','r','ψ','\phi')
+% c21=c2(1);
+% c21.Color='r';
+% c21.LineWidth=2;
+% c22=c2(2);
+% c22.Color='g';
+% c22.LineWidth=2;
+% c23=c2(3);
+% c23.Color='b';
+% c23.LineWidth=2;
+% c24=c2(4);
+% c24.Color='m';
+% c24.LineWidth=2;
+% c25=c2(5);
+% c25.Color='y';
+% c25.LineWidth=2;
+
+
+
+% Modo di Dutch Roll --------------
+
+omega_dr = omega_n_lat(4);
+T_dr = 2*pi/omega_dr;
+zita_dr = -real(EIGlat(4,4))/omega_n_lat(4);
+
+% Autovettore associato al Dutch Roll
+Z_dr=Vlat(:,4);
+
+% Adimensionalizzazione
+Z_dr(2)=Z_dr(2)*(b/(2*V));
+Z_dr(3)=Z_dr(3)*(b/(2*V));
+
+% Normalizzazione dei vettori rispetto a phi
+
+Z_dr=Z_dr./Z_dr(5);
+
+% Cerco i moduli per una stima di lunghezza relativa delle frecce nel diagr
+% di Argand
+
+Z_dr_mod=abs(Z_dr);
+
+% Tracciamento del Diagramma di Argand
+figure(3)
+c3=compass(Z_dr);
+%title('Dutch Roll Mode Argand Diagram')
+legend('β','p','r','ψ','\phi')
+c31=c3(1);
+c31.Color='r';
+c31.LineWidth=2;
+c32=c3(2);
+c32.Color='g';
+c32.LineWidth=2;
+c33=c3(3);
+c33.Color='b';
+c33.LineWidth=2;
+c34=c3(4);
+c34.Color='m';
+c34.LineWidth=2;
+c35=c3(5);
+c35.Color='y';
+c35.LineWidth=2;
+
 
 % Confronto con i modelli di ordine ridotto della dinamica latero-direzionale
 
