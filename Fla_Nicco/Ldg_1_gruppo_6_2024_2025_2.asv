@@ -453,6 +453,91 @@ yline(0, '--k', 'Im = 0');  % Asse reale (orizzontale)
 title('Confronto dinamica longitudinale e latero-direzionale')
 legend([long, lat])  % mostra SOLO questi due
 
+% Confronto con il modello di ordine ridotto
+%Lp=
+
+
+% Modo Spirale ----------------
+
+omega_s = omega_n_lat(3);
+T_s = 2*pi/omega_s;
+zita_s = -real(EIGlat(3,3))/omega_n_lat(3);
+
+% Autovettore associato alla Spirale
+Z_s=Vlat(:,3);
+% Adimensionalizzazione
+Z_s(2)=Z_s(2)*(b/(2*V));
+Z_s(3)=Z_s(3)*(b/(2*V));
+% Normalizzazione dei vettori rispetto a phi
+Z_r=Z_r./Z_r(5);
+% diagramma di Argand non necessario per dinamiche non oscillatorie
+% Tracciamento del Diagramma di Argand
+%%%%%%figure( )
+% c2=compass(Z_s);
+% title('Spiral Mode Argand Diagram')
+% legend('β','p','r','ψ','\phi')
+% c21=c2(1);
+% c21.Color='r';
+% c21.LineWidth=2;
+% c22=c2(2);
+% c22.Color='g';
+% c22.LineWidth=2;
+% c23=c2(3);
+% c23.Color='b';
+% c23.LineWidth=2;
+% c24=c2(4);
+% c24.Color='m';
+% c24.LineWidth=2;
+% c25=c2(5);
+% c25.Color='y';
+% c25.LineWidth=2;
+
+
+
+% Modo di Dutch Roll --------------
+
+omega_dr = omega_n_lat(4);
+T_dr = 2*pi/omega_dr;
+zita_dr = -real(EIGlat(4,4))/omega_n_lat(4);
+
+% Autovettore associato al Dutch Roll
+Z_dr=Vlat(:,4);
+
+% Adimensionalizzazione
+Z_dr(2)=Z_dr(2)*(b/(2*V));
+Z_dr(3)=Z_dr(3)*(b/(2*V));
+
+% Normalizzazione dei vettori rispetto a phi
+
+Z_dr=Z_dr./Z_dr(5);
+
+% Cerco i moduli per una stima di lunghezza relativa delle frecce nel diagr
+% di Argand
+
+Z_dr_mod=abs(Z_dr);
+
+% Tracciamento del Diagramma di Argand
+figure(3)
+c3=compass(Z_dr);
+%title('Dutch Roll Mode Argand Diagram')
+legend('β','p','r','ψ','\phi')
+c31=c3(1);
+c31.Color='r';
+c31.LineWidth=2;
+c32=c3(2);
+c32.Color='g';
+c32.LineWidth=2;
+c33=c3(3);
+c33.Color='b';
+c33.LineWidth=2;
+c34=c3(4);
+c34.Color='m';
+c34.LineWidth=2;
+c35=c3(5);
+c35.Color='y';
+c35.LineWidth=2;
+
+
 % Confronto con i modelli di ordine ridotto della dinamica latero-direzionale
 
 CY0 = 0; CYb = -0.59; CYp = -0.19; CYr = 0.39; CYda = 0.0; CYdr = 0.148;
