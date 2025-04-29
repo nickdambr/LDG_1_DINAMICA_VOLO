@@ -88,10 +88,6 @@ Dlong = [0;
 
 SYSlong = ss(Along,Blong,Clong,Dlong);
 
-% Tracciamento della mappa zero-poli per il sistema longitudinale
-figure(1)
-pzmap(SYSlong);
-%title('Longitudinal Pole Zero Map')
 % Calcolo degli autovettori e degli autovalori del sistema linearizzato
 format long
 [Vlong,EIGlong] = eig(Along);
@@ -101,7 +97,7 @@ format long
 omega_n_long = [abs(EIGlong(1,1));abs(EIGlong(2,2));abs(EIGlong(3,3));...
     abs(EIGlong(4,4));abs(EIGlong(5,5))];
 
-% Pulsazione,periodo e smorzamento associati al modo fugoide
+% Modo fugoide
 
 omega_ph = omega_n_long(3);
 T_ph = 2*pi/omega_ph;
@@ -124,12 +120,26 @@ Zph(5)=Zph(5)/X0_air3m(12);             % Quota
 % Normalizzazione dei vettori rispetto a theta (angolo di beccheggio)
 
 Zph=Zph./Zph(4);
+grafico='pzmap';
+% Tracciamento della mappa zero-poli per il sistema longitudinale
+switch grafico
+    case 'pzmap'
+        figure(1)
+        pzmap(SYSlong);
+    case 'normal'
+        figure(1)
+        plot(real(diag(EIGlong)), imag(diag(EIGlong)), 'rx', 'LineWidth', 1)
+        xline(0, '--k', 'Re = 0');  % Asse immaginario (verticale)
+        yline(0, '--k', 'Im = 0');  % Asse reale (orizzontale)
+end
+title('Diagramma zero-poli dinamica longitudinale')
+text(real(diag(EIGlong)), imag(diag(EIGlong)), {'1','2','3','4','5'}, 'VerticalAlignment','bottom','HorizontalAlignment','right');
 
 % Tracciamento del Diagramma di Argand
 
 figure(2)
 c0=compass(Zph(1:4));
-title('Phugoid Mode Argand Diagram')
+title('Diagramma di Argand modo fugoide')
 legend('V','α','q','θ')
 c01=c0(1);
 c01.Color='r';
@@ -144,6 +154,43 @@ c04=c0(4);
 c04.Color='m';
 c04.LineWidth=2;
 
+% Modo di corto periodo
+
+omega_sp = omega_n_long(1);
+T_sp = 2*pi/omega_sp;
+zita_sp = -real(EIGlong(1,1))/omega_sp;
+
+% Autovettore associato al corto periodo
+Zsp = Vlong(:,1);
+
+% Adimensionalizzazione
+
+Zsp(1)=Zsp(1)/X0_air3m(1);
+Zsp(3)=Zsp(3)*cbar/(2*X0_air3m(1));
+Zsp(5)=Zsp(5)/X0_air3m(12);
+
+% Normalizzazione dei vettori rispetto a theta (angolo di beccheggio)
+
+Zsp=Zsp./Zsp(4);
+
+% Tracciamento del Diagramma di Argand
+
+figure(3)
+c1=compass(Zsp(1:4));
+title('Diagramma di Argand modo di corto periodo')
+legend('V','α','q','θ')
+c11=c1(1);
+c11.Color='r';
+c11.LineWidth=2;
+c12=c1(2);
+c12.Color='g';
+c12.LineWidth=2;
+c13=c1(3);
+c13.Color='b';
+c13.LineWidth=2;
+c14=c1(4);
+c14.Color='m';
+c14.LineWidth=2;
 
 % Confronto con i modelli di ordine ridotto della dinamica longitudinale
 
@@ -264,13 +311,6 @@ Dlat = [0   0;
 
 SYSlat=ss(Alat,Blat,Clat,Dlat);
 
-% Tracciamento della mappa zero-poli per il sistema longitudinale
-% ----------figure( INSERISCI NUMERO )
-
-pzmap(SYSlat);
-
-%title('Lateral Pole Zero Map')
-
 % Calcolo degli autovettori e degli autovalori del sistema linearizzato
 
 [Vlat,EIGlat]=eig(Alat);
@@ -280,7 +320,58 @@ pzmap(SYSlat);
 omega_n_lat = [abs(EIGlat(1,1));abs(EIGlat(2,2));abs(EIGlat(3,3));...
     abs(EIGlat(4,4));abs(EIGlat(5,5))];
 
-% Modo di Rollio --------------
+% Modo Spirale 
+omega_s = omega_n_lat(1);
+T_s = 2*pi/omega_s;
+zita_s = -real(EIGlat(1,1))/omega_n_lat(1);
+
+% Autovettore associato al Rollio
+Z_s=Vlat(:,1);
+
+% Adimensionalizzazione
+Z_s(2)=Z_s(2)*(b/(2*V));
+Z_s(3)=Z_s(3)*(b/(2*V));
+
+% Normalizzazione dei vettori rispetto a phi
+Z_s=Z_s./Z_s(5);
+
+% Tracciamento della mappa zero-poli per il sistema latero-direzionale
+switch grafico
+    case 'pzmap'
+        figure(4)
+        pzmap(SYSlat);
+    case 'normal'
+        figure(4)
+        plot(real(diag(EIGlat)), imag(diag(EIGlat)), 'bx', 'LineWidth', 1)
+        xline(0, '--k', 'Re = 0');  % Asse immaginario (verticale)
+        yline(0, '--k', 'Im = 0');  % Asse reale (orizzontale)
+end
+title('Diagramma zero-poli dinamica latero-direzionale')
+text(real(diag(EIGlat)), imag(diag(EIGlat)), {'1','2','3','4','5'}, 'VerticalAlignment','bottom','HorizontalAlignment','right');
+
+
+% Tracciamento del Diagramma di Argand
+figure(5)
+c2=compass(Z_s);
+title('Diagramma di Argand modo spirale')
+legend('β','p','r','ψ','\phi')
+c21=c2(1);
+c21.Color='r';
+c21.LineWidth=2;
+c22=c2(2);
+c22.Color='g';
+c22.LineWidth=2;
+c23=c2(3);
+c23.Color='b';
+c23.LineWidth=2;
+c24=c2(4);
+c24.Color='m';
+c24.LineWidth=2;
+c25=c2(5);
+c25.Color='y';
+c25.LineWidth=2;
+
+% Modo di Rollio 
 omega_r = omega_n_lat(2);
 T_r = 2*pi/omega_r;
 zita_r = -real(EIGlat(2,2))/omega_n_lat(2);
@@ -296,93 +387,9 @@ Z_r(3)=Z_r(3)*(b/(2*V));
 Z_r=Z_r./Z_r(5);
 
 % Tracciamento del Diagramma di Argand
-%%%%%%figure(2)
-% c1=compass(Z_r);
-% title('Roll Mode Argand Diagram')
-% legend('β','p','r','ψ','\phi')
-% c11=c1(1);
-% c11.Color='r';
-% c11.LineWidth=2;
-% c12=c1(2);
-% c12.Color='g';
-% c12.LineWidth=2;
-% c13=c1(3);
-% c13.Color='b';
-% c13.LineWidth=2;
-% c14=c1(4);
-% c14.Color='m';
-% c14.LineWidth=2;
-% c15=c1(5);
-% c15.Color='y';
-% c15.LineWidth=2;
-
-% Confronto con il modello di ordine ridotto
-%Lp=
-
-
-% Modo Spirale ----------------
-
-omega_s = omega_n_lat(3);
-T_s = 2*pi/omega_s;
-zita_s = -real(EIGlat(3,3))/omega_n_lat(3);
-
-% Autovettore associato alla Spirale
-Z_s=Vlat(:,3);
-% Adimensionalizzazione
-Z_s(2)=Z_s(2)*(b/(2*V));
-Z_s(3)=Z_s(3)*(b/(2*V));
-% Normalizzazione dei vettori rispetto a phi
-Z_r=Z_r./Z_r(5);
-% diagramma di Argand non necessario per dinamiche non oscillatorie
-% Tracciamento del Diagramma di Argand
-%%%%%%figure( )
-% c2=compass(Z_s);
-% title('Spiral Mode Argand Diagram')
-% legend('β','p','r','ψ','\phi')
-% c21=c2(1);
-% c21.Color='r';
-% c21.LineWidth=2;
-% c22=c2(2);
-% c22.Color='g';
-% c22.LineWidth=2;
-% c23=c2(3);
-% c23.Color='b';
-% c23.LineWidth=2;
-% c24=c2(4);
-% c24.Color='m';
-% c24.LineWidth=2;
-% c25=c2(5);
-% c25.Color='y';
-% c25.LineWidth=2;
-
-
-
-% Modo di Dutch Roll --------------
-
-omega_dr = omega_n_lat(4);
-T_dr = 2*pi/omega_dr;
-zita_dr = -real(EIGlat(4,4))/omega_n_lat(4);
-
-% Autovettore associato al Dutch Roll
-Z_dr=Vlat(:,4);
-
-% Adimensionalizzazione
-Z_dr(2)=Z_dr(2)*(b/(2*V));
-Z_dr(3)=Z_dr(3)*(b/(2*V));
-
-% Normalizzazione dei vettori rispetto a phi
-
-Z_dr=Z_dr./Z_dr(5);
-
-% Cerco i moduli per una stima di lunghezza relativa delle frecce nel diagr
-% di Argand
-
-Z_dr_mod=abs(Z_dr);
-
-% Tracciamento del Diagramma di Argand
-figure(3)
-c3=compass(Z_dr);
-%title('Dutch Roll Mode Argand Diagram')
+figure(6)
+c3=compass(Z_r);
+title('Diagramma di Argan dinamica modo di rollio')
 legend('β','p','r','ψ','\phi')
 c31=c3(1);
 c31.Color='r';
@@ -400,6 +407,51 @@ c35=c3(5);
 c35.Color='y';
 c35.LineWidth=2;
 
+% Modo di Dutch roll 
+omega_dr = omega_n_lat(3);
+T_dr = 2*pi/omega_dr;
+zita_dr = -real(EIGlat(3,3))/omega_n_lat(3);
+
+% Autovettore associato al Rollio
+Z_dr=Vlat(:,3);
+
+% Adimensionalizzazione
+Z_dr(2)=Z_dr(2)*(b/(2*V));
+Z_dr(3)=Z_dr(3)*(b/(2*V));
+
+% Normalizzazione dei vettori rispetto a phi
+Z_dr=Z_dr./Z_dr(5);
+
+% Tracciamento del Diagramma di Argand
+figure(7)
+c4=compass(Z_dr);
+title('Diagramma di Argand modo di dutch roll')
+legend('β','p','r','ψ','\phi')
+c41=c4(1);
+c41.Color='r';
+c41.LineWidth=2;
+c42=c4(2);
+c42.Color='g';
+c42.LineWidth=2;
+c43=c4(3);
+c43.Color='b';
+c43.LineWidth=2;
+c44=c4(4);
+c44.Color='m';
+c44.LineWidth=2;
+c45=c4(5);
+c45.Color='y';
+c45.LineWidth=2;
+% Confronto dinamica longitudinale e latero-direzionale
+
+figure(8)
+long=plot(real(diag(EIGlong)), imag(diag(EIGlong)), 'rx', 'LineWidth', 1, 'DisplayName','Longitudinale');
+hold on
+lat=plot(real(diag(EIGlat)), imag(diag(EIGlat)), 'bx', 'LineWidth', 1, 'DisplayName','Latero-direzionale');
+xline(0, '--k', 'Re = 0');  % Asse immaginario (verticale)
+yline(0, '--k', 'Im = 0');  % Asse reale (orizzontale)
+title('Confronto dinamica longitudinale e latero-direzionale')
+legend([long, lat])  % mostra SOLO questi due
 
 % Confronto con i modelli di ordine ridotto della dinamica latero-direzionale
 
