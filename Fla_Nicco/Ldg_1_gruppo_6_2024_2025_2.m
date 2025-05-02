@@ -304,7 +304,7 @@ switch grafico
         yline(0, '--k', 'Im = 0');  % Asse reale (orizzontale)
 end
 title('Diagramma zero-poli dinamica latero-direzionale')
-text(real(diag(EIGlat)), imag(diag(EIGlat)), {'1','2','3','4','5'}, 'VerticalAlignment','bottom','HorizontalAlignment','right');
+%text(real(diag(EIGlat)), imag(diag(EIGlat)), {'1','2','3','4','5'}, 'VerticalAlignment','bottom','HorizontalAlignment','right');
 
 
 % Tracciamento del Diagramma di Argand
