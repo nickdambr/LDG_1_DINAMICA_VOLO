@@ -58,9 +58,9 @@ de0_air3m = U0_air3m(7);
 load('linsysLONG_beechcraft99.mat');
 [Along, Blong, Clong, Dlong] = ssdata(linsysLONG);   % estrae le matrici
 
-% Si ricorda che il vettore di stato è X=(V zetaE alpha q theta)
+% Si ricorda che il vettore di stato è X=(V H alpha q theta)
 % e che il vettore di output (per il sistema longitudinale) è
-% Y=(V alpha q theta ZetaE)
+% Y=(V alpha q theta H)
 
 % Creazione del sistema linearizzato dalle matrici ottenute
 
@@ -116,9 +116,9 @@ title('Diagramma zero-poli dinamica longitudinale')
 % Tracciamento del Diagramma di Argand
 
 figure(2)
-c0=compass(Zph(1:4));
+c0=compass(Zph(1:5));
 title('Diagramma di Argand modo fugoide')
-legend('V','α','q','θ')
+legend('V','α','q','θ','H')
 c01=c0(1);
 c01.Color='r';
 c01.LineWidth=2;
@@ -126,11 +126,14 @@ c02=c0(2);
 c02.Color='g';
 c02.LineWidth=2;
 c03=c0(3);
-c03.Color='b';
+c03.Color='y';
 c03.LineWidth=2;
 c04=c0(4);
 c04.Color='m';
 c04.LineWidth=2;
+c05=c0(5);
+c05.Color='b';
+c05.LineWidth=2;
 
 % Modo di corto periodo
 
@@ -154,7 +157,7 @@ Zsp=Zsp./Zsp(4);
 % Tracciamento del Diagramma di Argand
 
 figure(3)
-c1=compass(Zsp(1:4));
+c1=compass(Zsp(1:5));
 title('Diagramma di Argand modo di corto periodo')
 legend('V','α','q','θ')
 c11=c1(1);
@@ -164,11 +167,14 @@ c12=c1(2);
 c12.Color='g';
 c12.LineWidth=2;
 c13=c1(3);
-c13.Color='b';
+c13.Color='y';
 c13.LineWidth=2;
 c14=c1(4);
 c14.Color='m';
 c14.LineWidth=2;
+c15=c0(5);
+c15.Color='b';
+c15.LineWidth=2;
 
 % Confronto con i modelli di ordine ridotto della dinamica longitudinale
 
@@ -278,12 +284,12 @@ omega_n_lat = [abs(EIGlat(1,1));abs(EIGlat(2,2));abs(EIGlat(3,3));...
     abs(EIGlat(4,4));abs(EIGlat(5,5))];
 
 % Modo Spirale 
-omega_s = omega_n_lat(1);
+omega_s = omega_n_lat(5);
 T_s = 2*pi/omega_s;
-zita_s = -real(EIGlat(1,1))/omega_n_lat(1);
+zita_s = -real(EIGlat(5,5))/omega_n_lat(5);
 
-% Autovettore associato al Rollio
-Z_s=Vlat(:,1);
+% Autovettore associato alla Spirale
+Z_s=Vlat(:,5);
 
 % Adimensionalizzazione
 Z_s(2)=Z_s(2)*(b/(2*V));
