@@ -47,7 +47,7 @@ optstheta.Xlabel.String = 'Pulsazione';
 optstheta.Xlabel.FontSize = 11;
 optstheta.Ylabel.String = {'Guadagno'  'Fase'};
 optstheta.Ylabel.FontSize = 11;
-optstheta.XLim=[10^-16 100];
+optstheta.XLim=[10^-3 100];
 optstheta.XLimMode='manual';
 
 
