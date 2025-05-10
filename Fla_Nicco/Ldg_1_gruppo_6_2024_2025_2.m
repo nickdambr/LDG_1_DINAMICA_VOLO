@@ -477,3 +477,6 @@ T_DRa = 2*pi/omega_DRa;
 Err_DRa = abs(omega_DRa-omega_dr)/omega_dr * 100;
 Err_zDRa = abs(zita_DRa-zita_dr)/zita_dr * 100;
 Err_TDRa = abs(T_DRa-T_dr)/T_dr * 100;
+
+
+
