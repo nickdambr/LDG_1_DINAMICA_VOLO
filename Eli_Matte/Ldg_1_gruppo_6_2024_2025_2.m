@@ -79,7 +79,7 @@ omega_n_long = [abs(EIGlong(1,1));abs(EIGlong(2,2));abs(EIGlong(3,3));...
 
 omega_ph = omega_n_long(3);
 T_ph = 2*pi/omega_ph;
-zita_ph = -real(EIGlong(3,3))/omega_n_long(3);
+zeta_ph = -real(EIGlong(3,3))/omega_n_long(3);
 
 % Autovettore associato al fugoide
 
@@ -136,7 +136,7 @@ c04.LineWidth=2;
 
 omega_sp = omega_n_long(1);
 T_sp = 2*pi/omega_sp;
-zita_sp = -real(EIGlong(1,1))/omega_sp;
+zeta_sp = -real(EIGlong(1,1))/omega_sp;
 
 % Autovettore associato al corto periodo
 Zsp = Vlong(:,1);
@@ -189,7 +189,7 @@ T = Fx0_air3m;
 CDe = 2*T/(S*rho*V^2);
 CLe = (2*W)/(rho*S*V^2);
 Xu = (0.5*rho*V*S*(-3*CDe))/m;
-Zu = (-0.5*rho*V*S*(2*CLe))/m;
+Zu = (0.5*rho*V*S*(-2*CLe))/m;
 Mu = 0; %si trascurano gli effetti della comprimibilità
 Xw = (0.5*rho*V*S*(CLe-CDa)/m);
 Zw = (-0.5*rho*V*S*(CLa+CDe))/m;
@@ -208,9 +208,9 @@ omega_ph_lanch = sqrt(2)*(9.81/V);
 Ee = CLe/CDe;
 omega_ph1 = sqrt((-g * Zu)/V);
 T_ph1=1/omega_ph1;
-zita_ph1 = -Xu/(2*omega_ph1);
+zeta_ph1 = -Xu/(2*omega_ph1);
 Err_ph1 = abs(omega_ph1-omega_ph)/omega_ph * 100;
-Err_z1= abs(zita_ph1-zita_ph)/zita_ph * 100;
+Err_z1= abs(zeta_ph1-zeta_ph)/zeta_ph * 100;
 
 
 % Secondo modello
@@ -218,39 +218,42 @@ Err_z1= abs(zita_ph1-zita_ph)/zita_ph * 100;
 Mwue = Mw*V;
 MqZw = Mq*Zw;
 omega_ph2_semp = omega_ph1;
-zita_ph2_semp = -Xu/(2*omega_ph2_semp);
-T_ph2_semp=1/omega_ph2_semp;
+zeta_ph2_semp = -Xu/(2*omega_ph2_semp);
+T_ph2_semp = 1/omega_ph2_semp;
 omega_ph2 = sqrt(g*(Mu*Zw-Mw*Zu)/(Mw*V-Mq*Zw));
-T_ph2=1/omega_ph2;
-zita_ph2 = -(Xu+Xw*((Mq*Zu-Mu*V)/(Mw*V-Mq*Zw)))/(2*omega_ph2);
+T_ph2 = 1/omega_ph2;
+zeta_ph2 = -(Xu+Xw*((Mq*Zu-Mu*V)/(Mw*V-Mq*Zw)))/(2*omega_ph2);
 Err_ph2 = abs(omega_ph2-omega_ph)/omega_ph * 100;
-Err_z2 = abs(zita_ph2-zita_ph)/zita_ph * 100;
+Err_z2 = abs(zeta_ph2-zeta_ph)/zeta_ph * 100;
 
 
 % Effetto del gradiente di densità nel fugoide
 
 kappa = 1.38*10^(-4);
-Fcorr=1/sqrt(1 + (kappa * V^2)/(2*g));
+Fcorr = 1/sqrt(1 + (kappa * V^2)/(2*g));
 omega_ph2_prime = omega_ph2/Fcorr;
-zita_ph2_prime = -(Xu+Xw*((Mq*Zu-Mu*V)/(Mw*V-Mq*Zw)))/(2*omega_ph2_prime);
+zeta_ph2_prime = -(Xu+Xw*((Mq*Zu-Mu*V)/(Mw*V-Mq*Zw)))/(2*omega_ph2_prime);
 Eff_grad_ph = abs(omega_ph2_prime-omega_ph2)/omega_ph2 * 100;
 Err_ph2_corr = abs(omega_ph2_prime-omega_ph)/omega_ph * 100;
-Err_z2_corr = abs(zita_ph2_prime-zita_ph)/zita_ph * 100;
+Err_z2_corr = abs(zeta_ph2_prime-zeta_ph)/zeta_ph * 100;
 
 
 % Modello approssimato corto periodo
 
 omega_SP = sqrt((-0.5*rho*V^2*S*cbar*Cma)/Iys);
-T_SP=1/omega_SP;
-zita_SP = -(Mq+Zw)/(2*omega_SP);
+T_SP = 1/omega_SP;
+zeta_SP = -(Mq+Zw)/(2*omega_SP);
+Err_omega_SP = abs(omega_SP-omega_sp)/omega_sp * 100;
+Err_zeta_SP = abs(zeta_SP-zeta_sp)/zeta_sp * 100;
 
 
 % Effetto del gradiente di densità nel corto periodo
 
 omega_SP_prime = omega_SP/Fcorr;
-zita_SP_prime = -(Mq+Zw)/(2*omega_SP_prime);
+zeta_SP_prime = -(Mq+Zw)/(2*omega_SP_prime);
 Eff_grad_SP = abs(omega_SP_prime-omega_SP)/omega_SP * 100;
-
+Err_omega_SP_corr = abs(omega_SP_prime-omega_sp)/omega_sp * 100;
+Err_zeta_SP_corr = abs(zeta_SP_prime-zeta_sp)/zeta_sp * 100;
 
 
 %------------------------------------------------------------------------
@@ -280,7 +283,7 @@ omega_n_lat = [abs(EIGlat(1,1));abs(EIGlat(2,2));abs(EIGlat(3,3));...
 % Modo Spirale 
 omega_s = omega_n_lat(1);
 T_s = 2*pi/omega_s;
-zita_s = -real(EIGlat(1,1))/omega_n_lat(1);
+zeta_s = -real(EIGlat(1,1))/omega_n_lat(1);
 
 % Autovettore associato al Rollio
 Z_s=Vlat(:,1);
@@ -331,7 +334,7 @@ c25.LineWidth=2;
 % Modo di Rollio 
 omega_r = omega_n_lat(2);
 T_r = 2*pi/omega_r;
-zita_r = -real(EIGlat(2,2))/omega_n_lat(2);
+zeta_r = -real(EIGlat(2,2))/omega_n_lat(2);
 
 % Autovettore associato al Rollio
 Z_r=Vlat(:,2);
@@ -367,7 +370,7 @@ c35.LineWidth=2;
 % Modo di Dutch roll 
 omega_dr = omega_n_lat(3);
 T_dr = 2*pi/omega_dr;
-zita_dr = -real(EIGlat(3,3))/omega_n_lat(3);
+zeta_dr = -real(EIGlat(3,3))/omega_n_lat(3);
 
 % Autovettore associato al Rollio
 Z_dr=Vlat(:,3);
@@ -472,8 +475,8 @@ Err_p = abs(lambda_p-EIGlat(2,2))/abs(EIGlat(2,2)) * 100;
 % Modello di ordine ridotto del dutch roll
 
 omega_DRa = sqrt(Nb_prime + Nr_prime * (Yb/V));
-zita_DRa = - ((Yb/V)+Nr_prime)/(2*omega_DRa);
+zeta_DRa = - ((Yb/V)+Nr_prime)/(2*omega_DRa);
 T_DRa = 2*pi/omega_DRa;
 Err_DRa = abs(omega_DRa-omega_dr)/omega_dr * 100;
-Err_zDRa = abs(zita_DRa-zita_dr)/zita_dr * 100;
+Err_zDRa = abs(zeta_DRa-zeta_dr)/zeta_dr * 100;
 Err_TDRa = abs(T_DRa-T_dr)/T_dr * 100;
