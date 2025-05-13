@@ -36,7 +36,7 @@ optsalpha.Xlabel.String = 'Pulsazione';
 optsalpha.Xlabel.FontSize = 11;
 optsalpha.Ylabel.String = {'Guadagno'  'Fase'};
 optsalpha.Ylabel.FontSize = 11;
-optsalpha.XLim=[10^-2 10];
+optsalpha.XLim=[10^-2 1000];
 optsalpha.XLimMode='manual';
 
 optstheta = bodeoptions;
@@ -97,7 +97,7 @@ optsalpha2.Xlabel.String = 'Pulsazione';
 optsalpha2.Xlabel.FontSize = 11;
 optsalpha2.Ylabel.String = {'Guadagno'  'Fase'};
 optsalpha2.Ylabel.FontSize = 11;
-optsalpha2.XLim=[10^-2 10];
+optsalpha2.XLim=[10^-2 10^3];
 optsalpha2.XLimMode='manual';
 
 
