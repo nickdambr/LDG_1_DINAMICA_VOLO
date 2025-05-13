@@ -10,11 +10,11 @@ load('linsysLONG_beechcraft99.mat');
 [Along, Blong, Clong, Dlong] = ssdata(linsysLONG);   % estrae le matrici
 
 % Bode plot
-
+% X=[V, H, alpha, q, theta]
 [ nums , den ] = ss2tf ( Along , Blong , Clong , Dlong,1);
 V_TF = tf ( nums (1 ,:) , den );
-alpha_TF = tf ( nums (2 ,:) , den );
-theta_TF = tf ( nums (4 ,:) , den );
+alpha_TF = tf ( nums (3 ,:) , den );
+theta_TF = tf ( nums (5 ,:) , den );
 
 % opzioni grafiche
 optsV = bodeoptions;
@@ -36,7 +36,7 @@ optsalpha.Xlabel.String = 'Pulsazione';
 optsalpha.Xlabel.FontSize = 11;
 optsalpha.Ylabel.String = {'Guadagno'  'Fase'};
 optsalpha.Ylabel.FontSize = 11;
-optsalpha.XLim=[10^-6 100];
+optsalpha.XLim=[10^-2 10];
 optsalpha.XLimMode='manual';
 
 optstheta = bodeoptions;
@@ -47,7 +47,7 @@ optstheta.Xlabel.String = 'Pulsazione';
 optstheta.Xlabel.FontSize = 11;
 optstheta.Ylabel.String = {'Guadagno'  'Fase'};
 optstheta.Ylabel.FontSize = 11;
-optstheta.XLim=[10^-3 100];
+optstheta.XLim=[10^-2 10];
 optstheta.XLimMode='manual';
 
 
@@ -81,3 +81,28 @@ theta_TF_Num_coeff=theta_TF.Numerator{1};
 theta_TF_Den_coeff=theta_TF.Denominator{1};
 theta_TF_Num = poly2sym(theta_TF_Num_coeff, s);
 theta_TF_Den = poly2sym(theta_TF_Den_coeff, s);
+
+
+% alpha_TF approssimata
+
+alpha_TF_Num_coeff_Approx=[ -0.278681,-27.3053,0.0000953289]; %from bode.nb
+alpha_TF_Den_coeff_Approx=[1,7.35127,36.8055,-0.000128496, ]; %from bode.nb
+alpha_TF_Approx = tf ( alpha_TF_Num_coeff_Approx , alpha_TF_Den_coeff_Approx);
+
+optsalpha2 = bodeoptions;
+optsalpha2.Title.String = 'Diagrammi di Bode';
+optsalpha2.Title.FontSize = 11;
+optsalpha2.Title.FontWeight = 'bold';
+optsalpha2.Xlabel.String = 'Pulsazione';
+optsalpha2.Xlabel.FontSize = 11;
+optsalpha2.Ylabel.String = {'Guadagno'  'Fase'};
+optsalpha2.Ylabel.FontSize = 11;
+optsalpha2.XLim=[10^-2 10];
+optsalpha2.XLimMode='manual';
+
+
+
+
+figure(12)
+bodeplot(alpha_TF_Approx,optsalpha2)
+grid
