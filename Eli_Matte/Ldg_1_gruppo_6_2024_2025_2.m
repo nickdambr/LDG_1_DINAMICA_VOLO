@@ -281,7 +281,7 @@ omega_n_lat = [abs(EIGlat(1,1));abs(EIGlat(2,2));abs(EIGlat(3,3));...
     abs(EIGlat(4,4));abs(EIGlat(5,5))];
 
 % Modo Spirale 
-omega_s = omega_n_lat(1);
+omega_s = omega_n_lat(5);
 T_s = 2*pi/omega_s;
 zeta_s = -real(EIGlat(1,1))/omega_n_lat(1);
 
@@ -444,13 +444,11 @@ Nr_prime = Nr+(Ixzs/Izs)* Lr;
 % Primo modello
 
 lambda_s1 = (Nr_prime * Lb_prime - Nb_prime * Lr_prime)/Lb_prime;
-T_s1 = - 2*pi/lambda_s1;
 Err_s1 = abs(lambda_s1-EIGlat(5,5))/abs(EIGlat(5,5)) * 100;
 
 % Secondo modello
 
 lambda_s2 = - (g * (Lb_prime * Nr_prime - Nb_prime * Lr_prime)) / (Yb * (Lr_prime * Np_prime - Nr_prime * Lp_prime) + V * (Nb_prime * Lp_prime - Lb_prime * Np_prime));
-T_s2 = - 2*pi/lambda_s2;
 Err_s2 = abs(lambda_s2-EIGlat(5,5))/abs(EIGlat(5,5)) * 100;
 
 % Terzo modello
@@ -461,22 +459,20 @@ a2_lat=Char_polyn_lat(3);
 a3_lat=Char_polyn_lat(4);
 a4_lat=Char_polyn_lat(5);
 lambda_s3=-a4_lat/a3_lat;
-T_s3 = - 2*pi/lambda_s3;
 Err_s3 = abs(lambda_s3-EIGlat(5,5))/abs(EIGlat(5,5)) * 100;
 
 
 % Modello di ordine ridotto del rollio
 
-lambda_p = Lp_prime;
-T_p = 2*pi/lambda_p;
-Err_p = abs(lambda_p-EIGlat(2,2))/abs(EIGlat(2,2)) * 100;
+lambda_R = Lp;
+Err_R = abs(lambda_R-EIGlat(2,2))/abs(EIGlat(2,2)) * 100;
 
 
 % Modello di ordine ridotto del dutch roll
 
-omega_DRa = sqrt(Nb_prime + Nr_prime * (Yb/V));
-zeta_DRa = - ((Yb/V)+Nr_prime)/(2*omega_DRa);
-T_DRa = 2*pi/omega_DRa;
-Err_DRa = abs(omega_DRa-omega_dr)/omega_dr * 100;
-Err_zDRa = abs(zeta_DRa-zeta_dr)/zeta_dr * 100;
-Err_TDRa = abs(T_DRa-T_dr)/T_dr * 100;
+omega_DR = sqrt(Nb_prime + Nr_prime * (Yb/V));
+zeta_DR = - ((Yb/V)+Nr_prime)/(2*omega_DR);
+T_DR = 2*pi/omega_DR;
+Err_DR = abs(omega_DR-omega_dr)/omega_dr * 100;
+Err_zDR = abs(zeta_DR-zeta_dr)/zeta_dr * 100;
+Err_TDR = abs(T_DR-T_dr)/T_dr * 100;
