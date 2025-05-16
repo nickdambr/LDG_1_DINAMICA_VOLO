@@ -480,3 +480,66 @@ Err_TDRa = abs(T_DRa-T_dr)/T_dr * 100;
 
 
 
+% Caratterizzazione della stabilità latero-direzionale
+Alatnum = [Yb/V, 0, -1, g/V; Lb_prime, Lp_prime, Lr_prime, 0; ...
+    Nb_prime, Np_prime, Nr_prime, 0; 0, 1, 0, 0];
+pAlatnum = poly(Alatnum);
+disp(pAlatnum);
+
+syms s
+Alatnumsym = sym(Alatnum);
+charpoly(Alatnumsym, s)
+
+a1_latnum=pAlatnum(2);
+a2_latnum=pAlatnum(3);
+a3_latnum=pAlatnum(4);
+a4_latnum=pAlatnum(5);
+
+a1_latnum_analytic=-Lp_prime-Nr_prime-Yb/V;
+a2_latnum_analytic=(Yb/V)*(Lp_prime+Nr_prime) + Nb_prime+ Lp_prime*Nr_prime - Lr_prime*Np_prime;
+a3_latnum_analytic=-(Yb/V)*(Lp_prime*Nr_prime - Lr_prime*Np_prime) + (Lb_prime*Np_prime - Lp_prime*Nb_prime) - (g/V)*Lb_prime;
+a4_latnum_analytic=(g/V)*(Lb_prime*Nr_prime - Lr_prime*Nb_prime);
+
+syms Lb_prime_sym Nb_prime_sym
+
+a1_latnum_sym=-Lp_prime-Nr_prime-Yb/V;
+a2_latnum_sym=(Yb/V)*(Lp_prime+Nr_prime) + Nb_prime_sym+ Lp_prime*Nr_prime - Lr_prime*Np_prime;
+a3_latnum_sym=-(Yb/V)*(Lp_prime*Nr_prime - Lr_prime*Np_prime) + (Lb_prime_sym*Np_prime - Lp_prime*Nb_prime_sym) - (g/V)*Lb_prime_sym;
+a4_latnum_sym=(g/V)*(Lb_prime_sym*Nr_prime - Lr_prime*Nb_prime_sym);
+
+
+a1_fun = matlabFunction(a1_latnum_sym,...
+    'Vars', [Lb_prime_sym, Nb_prime_sym]); % Create a MATLAB function from symbolic expression
+a2_fun = matlabFunction(a2_latnum_sym,...
+    'Vars', [Lb_prime_sym, Nb_prime_sym]); % Create a MATLAB function from symbolic expression
+a3_fun = matlabFunction(a3_latnum_sym,...
+    'Vars', [Lb_prime_sym, Nb_prime_sym]); % Create a MATLAB function from symbolic expression
+a4_fun = matlabFunction(a4_latnum_sym,...
+    'Vars', [Lb_prime_sym, Nb_prime_sym]); % Create a MATLAB function from symbolic expression
+
+[LB, NB] = meshgrid(-80:0.1:80,-100:0.1:100);  % Define a grid for Lb' and Nb'
+
+A4 = a4_fun(LB, NB); % Evaluate a4 over the grid
+
+figure(9)
+contour(LB, NB, A4, [0 0], 'LineWidth', 2);
+xlabel('L_b''');
+ylabel('N_b''');
+title('Zero Contour of a_4 = 0');
+grid on;
+axis equal;
+
+Delta_R_fun = @(Lb_prime_sym, Nb_prime_sym) ...
+    a3_fun(Lb_prime_sym, Nb_prime_sym) .* ...
+    (a1_fun(Lb_prime_sym, Nb_prime_sym) .* a2_fun(Lb_prime_sym, Nb_prime_sym) - a3_fun(Lb_prime_sym, Nb_prime_sym)) - ...
+    (a1_fun(Lb_prime_sym, Nb_prime_sym).^2) .* a4_fun(Lb_prime_sym, Nb_prime_sym);
+
+hold on
+Delta_R=Delta_R_fun(LB, NB);
+contour(LB, NB, Delta_R, [0 0],'LineWidth', 2, 'LineColor', 'r');
+xlabel('L_b''');
+ylabel('N_b''');
+title('Zero Contour of Delta_R = 0');
+grid on;
+axis equal;
+hold off
