@@ -525,9 +525,10 @@ figure(9)
 contour(LB, NB, A4, [0 0], 'LineWidth', 2);
 xlabel('L_b''');
 ylabel('N_b''');
+xlim([-80 80]);
+ylim([-10 100]);
 title('Zero Contour of a_4 = 0');
 grid on;
-axis equal;
 
 Delta_R_fun = @(Lb_prime_sym, Nb_prime_sym) ...
     a3_fun(Lb_prime_sym, Nb_prime_sym) .* ...
@@ -537,9 +538,15 @@ Delta_R_fun = @(Lb_prime_sym, Nb_prime_sym) ...
 hold on
 Delta_R=Delta_R_fun(LB, NB);
 contour(LB, NB, Delta_R, [0 0],'LineWidth', 2, 'LineColor', 'r');
+x_Lb = -17.812545357288787; 
+y_Nb = 3.691516198666904;
+plot(x_Lb, y_Nb, 'ko', 'MarkerSize', 5, 'MarkerFaceColor', 'm')  
 xlabel('L_b''');
 ylabel('N_b''');
-title('Zero Contour of Delta_R = 0');
+xlim([-80 80]);
+ylim([-10 100]);
+legend('vincolo sulla stabilità del dutch roll', 'vincolo sulla stabilità della spirale', 'il nostro velivolo', 'Location', 'northeast');
+title('Stabilità dinamica latero-direzionale');
 grid on;
-axis equal;
+
 hold off
