@@ -188,7 +188,7 @@ Ixzs = Ixzb * cos(2*alpha0) + 0.5 * (Ixb - Izb) * sin(2*alpha0);
 T = Fx0_air3m;
 CDe = 2*T/(S*rho*V^2);
 CLe = (2*W)/(rho*S*V^2);
-Xu = (0.5*rho*V*S*(-3*CDe))/m;
+Xu = (-rho*V*S*(CDe))/m;
 Zu = (0.5*rho*V*S*(-2*CLe))/m;
 Mu = 0; %si trascurano gli effetti della comprimibilità
 Xw = (0.5*rho*V*S*(CLe-CDa)/m);
@@ -230,6 +230,7 @@ Err_z2 = abs(zeta_ph2-zeta_ph)/zeta_ph * 100;
 % Effetto del gradiente di densità nel fugoide
 
 kappa = 1.38*10^(-4);
+kappa_prime = 0.5*kappa*rho*S*V^2*CLe;
 Fcorr = 1/sqrt(1 + (kappa * V^2)/(2*g));
 omega_ph2_prime = omega_ph2/Fcorr;
 zeta_ph2_prime = -(Xu+Xw*((Mq*Zu-Mu*V)/(Mw*V-Mq*Zw)))/(2*omega_ph2_prime);
