@@ -231,6 +231,7 @@ Err_z2 = abs(zeta_ph2-zeta_ph)/zeta_ph * 100;
 R = 287;
 T0 = 15+273.15;
 kappa_grec = g/(R*T0);
+kappa = rho*S*CLe*g;
 kappa_prime = 0.5*kappa_grec*rho*S*V^2*CLe;
 Fcorr = 1/sqrt(1 + (kappa_grec * V^2)/(2*g));
 omega_ph2_prime = omega_ph2/Fcorr;
