@@ -536,7 +536,6 @@ Delta_R_fun = @(Lb_prime_sym, Nb_prime_sym) ...
     (a1_fun(Lb_prime_sym, Nb_prime_sym).^2) .* a4_fun(Lb_prime_sym, Nb_prime_sym);
 
 hold on
-
 Delta_R=Delta_R_fun(LB, NB);
 contour(LB, NB, Delta_R, [0 0],'LineWidth', 2, 'LineColor', 'r');
 x_Lb = -17.812545357288787; 
