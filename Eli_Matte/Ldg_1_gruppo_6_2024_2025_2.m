@@ -228,10 +228,11 @@ Err_z2 = abs(zeta_ph2-zeta_ph)/zeta_ph * 100;
 
 
 % Effetto del gradiente di densità nel fugoide
-
-kappa = 1.38*10^(-4);
-kappa_prime = 0.5*kappa*rho*S*V^2*CLe;
-Fcorr = 1/sqrt(1 + (kappa * V^2)/(2*g));
+R = 287;
+T0 = 15+273.15;
+kappa_grec = g/(R*T0);
+kappa_prime = 0.5*kappa_grec*rho*S*V^2*CLe;
+Fcorr = 1/sqrt(1 + (kappa_grec * V^2)/(2*g));
 omega_ph2_prime = omega_ph2/Fcorr;
 zeta_ph2_prime = -(Xu+Xw*((Mq*Zu-Mu*V)/(Mw*V-Mq*Zw)))/(2*omega_ph2_prime);
 Eff_grad_ph = abs(omega_ph2_prime-omega_ph2)/omega_ph2 * 100;
