@@ -451,7 +451,8 @@ Err_s1 = abs(lambda_s1-EIGlat(5,5))/abs(EIGlat(5,5)) * 100;
 
 % Secondo modello
 
-lambda_s2 = - (g * (Lb_prime * Nr_prime - Nb_prime * Lr_prime)) / (Yb * (Lr_prime * Np_prime - Nr_prime * Lp_prime) + V * (Nb_prime * Lp_prime - Lb_prime * Np_prime));
+
+lambda_s2 =  (g * (Lb_prime * Nr_prime - Nb_prime * Lr_prime)) / (Yb * (Lr_prime * Np_prime - Nr_prime * Lp_prime) + V * (Nb_prime * Lp_prime - Lb_prime * Np_prime));
 Err_s2 = abs(lambda_s2-EIGlat(5,5))/abs(EIGlat(5,5)) * 100;
 
 % Terzo modello
