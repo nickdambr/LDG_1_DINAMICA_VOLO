@@ -16,6 +16,23 @@ V_TF = tf ( nums (1 ,:) , den );
 alpha_TF = tf ( nums (3 ,:) , den );
 theta_TF = tf ( nums (5 ,:) , den );
 
+% modello ottenuto trascurando l'effetto del gradiente di densità
+Along_prime = Along;
+Blong_prime = Blong;
+Clong_prime = Clong;
+Dlong_prime = Dlong;
+
+Along_prime(5,:)=[];
+Along_prime(:,5)=[];
+Blong_prime(5)=[];
+Clong_prime(2,:)=[];
+Clong_prime(:,2)=[];
+Dlong_prime(2)=[];
+
+[ nums_prime , den_prime ] = ss2tf ( Along_prime , Blong_prime , Clong_prime , Dlong_prime,1);
+V_TF_prime = tf ( nums_prime (1 ,:) , den_prime );
+
+
 % opzioni grafiche
 optsV = bodeoptions;
 optsV.Title.String = 'Diagrammi di Bode';
@@ -50,6 +67,17 @@ optstheta.Ylabel.FontSize = 11;
 optstheta.XLim=[10^-2 10];
 optstheta.XLimMode='manual';
 
+optsV_prime = bodeoptions;
+optsV_prime.Title.String = 'Diagrammi di Bode';
+optsV_prime.Title.FontSize = 11;
+optsV_prime.Title.FontWeight = 'bold';
+optsV_prime.Xlabel.String = 'Pulsazione';
+optsV_prime.Xlabel.FontSize = 11;
+optsV_prime.Ylabel.String = {'Guadagno'  'Fase'};
+optsV_prime.Ylabel.FontSize = 11;
+optsV_prime.XLim=[10^-8 10^2];
+optsV_prime.XLimMode='manual';
+
 
 
 figure(9)
@@ -62,6 +90,12 @@ grid
 
 figure(11)
 bodeplot(theta_TF,optstheta)
+grid
+
+figure(12)
+bodeplot(V_TF,optsV_prime)
+hold on
+bodeplot(V_TF_prime,optsV_prime)
 grid
 
 % funzioni di trasferimento
@@ -103,6 +137,6 @@ optsalpha2.XLimMode='manual';
 
 
 
-figure(12)
+figure(13)
 bodeplot(alpha_TF_Approx,optsalpha2)
 grid
