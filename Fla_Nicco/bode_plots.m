@@ -9,7 +9,7 @@ format long
 load('linsysLONG_beechcraft99.mat');
 [Along, Blong, Clong, Dlong] = ssdata(linsysLONG);   % estrae le matrici
 
-% Bode plot
+% Bode plots
 % X=[V, H, alpha, q, theta]
 [ nums , den ] = ss2tf ( Along , Blong , Clong , Dlong,1);
 V_TF = tf ( nums (1 ,:) , den );
@@ -102,42 +102,33 @@ legend('Modello iniziale', 'Modello ottenuto trascurando l''effetto del gradient
 % funzioni di trasferimento
 syms s
 
-V_TF_Num_coeff=V_TF.Numerator{1};
-V_TF_Den_coeff=V_TF.Denominator{1};
-V_TF_Num = poly2sym(V_TF_Num_coeff, s);
-V_TF_Den = poly2sym(V_TF_Den_coeff, s);
+TF_Den_coeff = V_TF.Denominator{1}; % usiamo V_TF, ma il denominatore è uguale 
+r_TF_Den = roots(TF_Den_coeff);
+TF_Den_factored = vpa(expand_roots_into_factors(r_TF_Den),4);
+disp(TF_Den_factored)
+
+V_TF_Num_coeff = V_TF.Numerator{1};
+r_V_TF_Num = roots(V_TF_Num_coeff);
+kV = V_TF_Num_coeff(find(V_TF_Num_coeff ~= 0, 1)); % fattore moltiplicativo del numeratore
+V_TF_Num_factored = vpa(kV*expand_roots_into_factors(r_V_TF_Num),4);
+disp(V_TF_Num_factored)
+
 
 alpha_TF_Num_coeff=alpha_TF.Numerator{1};
-alpha_TF_Den_coeff=alpha_TF.Denominator{1};
-alpha_TF_Num = poly2sym(alpha_TF_Num_coeff, s);
-alpha_TF_Den = poly2sym(alpha_TF_Den_coeff, s);
+r_alpha_TF_Num = roots(alpha_TF_Num_coeff);
+kalpha = alpha_TF_Num_coeff(find(alpha_TF_Num_coeff ~= 0, 1)); % fattore moltiplicativo del numeratore
+alpha_TF_Num_factored = vpa(kalpha*expand_roots_into_factors(r_alpha_TF_Num),4);
+disp(alpha_TF_Num_factored)
+
+
 
 theta_TF_Num_coeff=theta_TF.Numerator{1};
-theta_TF_Den_coeff=theta_TF.Denominator{1};
-theta_TF_Num = poly2sym(theta_TF_Num_coeff, s);
-theta_TF_Den = poly2sym(theta_TF_Den_coeff, s);
-
-
-% alpha_TF approssimata
-
-alpha_TF_Num_coeff_Approx=[ -0.278681,-27.3053,0.0000953289]; %from bode.nb
-alpha_TF_Den_coeff_Approx=[1,7.35127,36.8055,-0.000128496, ]; %from bode.nb
-alpha_TF_Approx = tf ( alpha_TF_Num_coeff_Approx , alpha_TF_Den_coeff_Approx);
-
-optsalpha2 = bodeoptions;
-optsalpha2.Title.String = 'Diagrammi di Bode';
-optsalpha2.Title.FontSize = 11;
-optsalpha2.Title.FontWeight = 'bold';
-optsalpha2.Xlabel.String = 'Pulsazione';
-optsalpha2.Xlabel.FontSize = 11;
-optsalpha2.Ylabel.String = {'Guadagno'  'Fase'};
-optsalpha2.Ylabel.FontSize = 11;
-optsalpha2.XLim=[10^-2 10^3];
-optsalpha2.XLimMode='manual';
+r_theta_TF_Num = roots(theta_TF_Num_coeff);
+ktheta = theta_TF_Num_coeff(find(theta_TF_Num_coeff ~= 0, 1)); % fattore moltiplicativo del numeratore
+theta_TF_Num_factored = vpa(ktheta*expand_roots_into_factors(r_theta_TF_Num),4);
+disp(theta_TF_Num_factored)
 
 
 
 
-figure(13)
-bodeplot(alpha_TF_Approx,optsalpha2)
-grid
+
