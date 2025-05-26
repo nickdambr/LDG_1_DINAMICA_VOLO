@@ -75,7 +75,7 @@ optsV_prime.Xlabel.String = 'Pulsazione';
 optsV_prime.Xlabel.FontSize = 11;
 optsV_prime.Ylabel.String = {'Guadagno'  'Fase'};
 optsV_prime.Ylabel.FontSize = 11;
-optsV_prime.XLim=[10^-8 10^2];
+optsV_prime.XLim=[10^-8 100];
 optsV_prime.XLimMode='manual';
 
 
@@ -97,6 +97,7 @@ bodeplot(V_TF,optsV_prime)
 hold on
 bodeplot(V_TF_prime,optsV_prime)
 grid
+legend('Modello iniziale', 'Modello ottenuto trascurando l''effetto del gradiente di densità')
 
 % funzioni di trasferimento
 syms s
