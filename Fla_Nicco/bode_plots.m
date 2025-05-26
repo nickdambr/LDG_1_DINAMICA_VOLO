@@ -130,5 +130,47 @@ disp(theta_TF_Num_factored)
 
 
 
+% alpha_TF approssimata
+
+alpha_TF_Num_Approx = vpa(-0.2787*(s + 97.98)*(s - 3.491e-6),4) ;
+
+TF_Den_Approx = vpa((s - 3.491e-6)*(s^2 + 7.351*s + 36.81),4);
+
+alpha_TF_Num_coeff_Approx=sym2poly(vpa(expand(alpha_TF_Num_Approx),4));
+TF_Den_coeff_Approx=sym2poly(vpa(expand(TF_Den_Approx),4));
+
+alpha_TF_Approx = tf(alpha_TF_Num_coeff_Approx , TF_Den_coeff_Approx);
+
+optsalpha2 = bodeoptions;
+optsalpha2.Title.String = 'Diagrammi di Bode';
+optsalpha2.Title.FontSize = 11;
+optsalpha2.Title.FontWeight = 'bold';
+optsalpha2.Xlabel.String = 'Pulsazione';
+optsalpha2.Xlabel.FontSize = 11;
+optsalpha2.Ylabel.String = {'Guadagno'  'Fase'};
+optsalpha2.Ylabel.FontSize = 11;
+optsalpha2.XLim=[10^-2 10^3];
+optsalpha2.XLimMode='manual';
 
 
+
+
+figure(13)
+bodeplot(alpha_TF_Approx,optsalpha2)
+grid
+
+
+
+
+% funzione di trasferimento V_TF_prime
+
+V_TF_prime_Den_coeff = V_TF_prime.Denominator{1}; % usiamo V_TF, ma il denominatore è uguale 
+r_V_TF_Den_prime = roots(V_TF_prime_Den_coeff);
+V_TF_prime_Den_factored = vpa(expand_roots_into_factors(r_V_TF_Den_prime),4);
+disp(V_TF_prime_Den_factored)
+
+V_TF_prime_Num_coeff = V_TF_prime.Numerator{1};
+r_V_TF_prime_Num = roots(V_TF_prime_Num_coeff);
+kV_prime = V_TF_prime_Num_coeff(find(V_TF_prime_Num_coeff ~= 0, 1)); % fattore moltiplicativo del numeratore
+V_TF_prime_Num_factored = vpa(kV_prime*expand_roots_into_factors(r_V_TF_prime_Num),4);
+disp(V_TF_prime_Num_factored)
