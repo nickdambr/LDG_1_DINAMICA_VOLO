@@ -1,4 +1,3 @@
-% Importazione del sistema dinamico longitudinale creato con il tool di
 clear
 clc
 close all
