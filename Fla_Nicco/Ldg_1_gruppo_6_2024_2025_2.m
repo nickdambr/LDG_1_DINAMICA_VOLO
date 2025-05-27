@@ -545,8 +545,8 @@ xlabel('L_b''');
 ylabel('N_b''');
 xlim([-80 80]);
 ylim([-10 100]);
-legend('vincolo sulla stabilità della spirale', 'vincolo sulla stabilità del dutch roll', 'Beechcraft99', 'Location', 'northeast');
-title('Stabilità dinamica latero-direzionale');
+legend('Vincolo sulla stabilità del modo spirale', 'Vincolo sulla stabilità del modo di Dutch roll', 'Beechcraft 99', 'Location', 'northeast');
+title('Caratterizzazione della stabilità dinamica latero-direzionale');
 grid on;
 
 hold off
