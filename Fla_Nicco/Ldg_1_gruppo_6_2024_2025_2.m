@@ -116,9 +116,9 @@ title('Diagramma zero-poli dinamica longitudinale')
 % Tracciamento del Diagramma di Argand
 
 figure(2)
-c0=compass(Zph(1:5));
+c0=compass(Zph(1:4));
 title('Diagramma di Argand modo fugoide')
-legend('V','α','q','θ','H')
+legend('V','α','q','θ')
 c01=c0(1);
 c01.Color='r';
 c01.LineWidth=2;
@@ -126,14 +126,14 @@ c02=c0(2);
 c02.Color='g';
 c02.LineWidth=2;
 c03=c0(3);
-c03.Color='y';
+c03.Color='b';
 c03.LineWidth=2;
 c04=c0(4);
 c04.Color='m';
 c04.LineWidth=2;
-c05=c0(5);
-c05.Color='b';
-c05.LineWidth=2;
+%c05=c0(5);
+%c05.Color='b';
+%c05.LineWidth=2;
 
 % Modo di corto periodo
 
@@ -157,7 +157,7 @@ Zsp=Zsp./Zsp(4);
 % Tracciamento del Diagramma di Argand
 
 figure(3)
-c1=compass(Zsp(1:5));
+c1=compass(Zsp(1:4));
 title('Diagramma di Argand modo di corto periodo')
 legend('V','α','q','θ')
 c11=c1(1);
@@ -167,14 +167,14 @@ c12=c1(2);
 c12.Color='g';
 c12.LineWidth=2;
 c13=c1(3);
-c13.Color='y';
+c13.Color='b';
 c13.LineWidth=2;
 c14=c1(4);
 c14.Color='m';
 c14.LineWidth=2;
-c15=c0(5);
-c15.Color='b';
-c15.LineWidth=2;
+%c15=c0(5);
+%c15.Color='b';
+%c15.LineWidth=2;
 
 % Confronto con i modelli di ordine ridotto della dinamica longitudinale
 
